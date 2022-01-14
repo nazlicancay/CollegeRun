@@ -26,7 +26,8 @@ public class GameManager : Singleton<GameManager>
             GameStarted = true;
             once = false;
             Starttext.gameObject.SetActive(false);
-            anim.SetBool("walk", true);
+            anim.SetTrigger(Animator.StringToHash("walkTrigger"));
+            Debug.Log(anim.GetBool("walk"));
         }
     }
 
