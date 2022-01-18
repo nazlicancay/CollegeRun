@@ -10,6 +10,10 @@ TagManager:
   - lawyer
   - good
   - bad
+  - stair1
+  - stair2
+  - stair3
+  - finish
   layers:
   - Default
   - TransparentFX

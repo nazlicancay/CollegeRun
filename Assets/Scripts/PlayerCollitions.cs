@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerCollitions : MonoBehaviour
@@ -23,6 +24,10 @@ public class PlayerCollitions : MonoBehaviour
    [SerializeField] private MeshRenderer artistMeshRenderer;
    [SerializeField] private MeshRenderer LawyerMeshRenderer;
    [SerializeField] public int score = 0 ;
+   [SerializeField] private bool good = false;
+   [SerializeField] private bool bad = false;
+   [SerializeField] public Vector3 endpos = new Vector3();
+   public ScoreBar scoreBar;
    public  int currentState;
    
    private GameManager gameManager;
@@ -32,6 +37,8 @@ public class PlayerCollitions : MonoBehaviour
     private void Awake()
     {
         gameManager = GameManager.Instance;
+        scoreBar.Slider.value = 0;
+
     }
 
     private void Update()
@@ -42,12 +49,18 @@ public class PlayerCollitions : MonoBehaviour
             {
                 case 1 : 
                     OnTypeGoodArtist();
+                    gameManager.GoodAnim.SetTrigger(Animator.StringToHash("walk"));
+                    good = true;
                     break;
                 case 2 :
                     OnTypeGoodLawyer();
+                    good = true;
+
                     break;
                 case 3 :
                     OnTypeGoodSci();
+                    good = true;
+
                     break;
                     
                     
@@ -59,21 +72,22 @@ public class PlayerCollitions : MonoBehaviour
         
         if (score < -2)
         {
-            gameManager.GameEnded = true;
-            gameManager.FailText.gameObject.SetActive(true);
+           
+          
             switch (currentState)
             {
                 case 1 :
                     OnTypeBadArtist();
-                   
+                   gameManager.badanim.SetTrigger(Animator.StringToHash("walk"));
+                    bad = true;
                     break;
                 case 2 :
                     OnTypeBadSci();
-                   
+                    bad = true;
                     break;
                 case 3 :
                     OnTypeBadLawyer();
-                  
+                    bad = true;
                     break;
                         
                     
@@ -89,6 +103,7 @@ public class PlayerCollitions : MonoBehaviour
         {
             case CharecterType.Artist:
                 OnTypeArtist();
+               gameManager.defBadanim.SetTrigger(Animator.StringToHash("walk"));
                 break;
             
             case CharecterType.Scientist:
@@ -153,7 +168,7 @@ public class PlayerCollitions : MonoBehaviour
     {
        BadArtistModel.SetActive(true);
        artistModel.SetActive(false);
-       Debug.Log("bad artist");
+      // Debug.Log("bad artist");
         
     }
     
@@ -201,6 +216,7 @@ public class PlayerCollitions : MonoBehaviour
       {
         
           ChangeState(CharecterType.Artist);
+          
           currentState = 1;
 
       }
@@ -224,13 +240,54 @@ public class PlayerCollitions : MonoBehaviour
        if (other.CompareTag("good"))
        {
            score += 2;
+           scoreBar.SetScore(score);
            Destroy(other.gameObject);
        }
 
        if (other.CompareTag("bad"))
        {
            score -= 2;
+           scoreBar.SetScore(score);
+
            Destroy(other.gameObject);
        }
+
+       if (other.CompareTag("stair1"))
+       {
+           gameManager.GameEnded = true;
+           if (bad == true)
+           {
+            gameManager.Fail();
+              
+           }
+
+           if (score <= 0)
+           {
+               gameManager.Fail();
+           }
+
+           if (good = true)
+           {
+               for (int i = 0 ; i< gameManager.stairs.Count ; i++)
+               {
+                   if (score > 0)
+                   {
+                       endpos = new Vector3(gameManager.stairs[i].position.x, gameManager.stairs[i].position.y,gameManager.stairs[i].position.z);
+                       transform.DOMove(endpos, 4f);
+                       score -= 2;
+                   }
+                  
+               }
+           }
+          
+       }
+
+       if (other.CompareTag("finish"))
+       {
+           gameManager.GoodAnim.SetTrigger(Animator.StringToHash("handshake"));
+           gameManager.GoodAnim.SetBool("walk" ,false);
+       }
    }
+
+    
 }
