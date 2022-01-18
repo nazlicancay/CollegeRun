@@ -18,6 +18,7 @@ public class PlayerCollitions : MonoBehaviour
    public GameObject GoodArtistModel;
    public GameObject GoodscientistModel;
    public GameObject GoodLawyerModel;
+   public int collactableScore;
   
 
    [SerializeField] private MeshRenderer scicentistMeshRenderer;
@@ -43,7 +44,7 @@ public class PlayerCollitions : MonoBehaviour
 
     private void Update()
     {
-        if (score > 8)
+        if (score > 100)
         {
             switch (currentState)
             {
@@ -70,7 +71,7 @@ public class PlayerCollitions : MonoBehaviour
             
         }
         
-        if (score < -2)
+        if (score < 0)
         {
            
           
@@ -239,14 +240,14 @@ public class PlayerCollitions : MonoBehaviour
 
        if (other.CompareTag("good"))
        {
-           score += 2;
+           score += collactableScore;
            scoreBar.SetScore(score);
            Destroy(other.gameObject);
        }
 
        if (other.CompareTag("bad"))
        {
-           score -= 2;
+           score -= collactableScore;
            scoreBar.SetScore(score);
 
            Destroy(other.gameObject);
@@ -270,12 +271,13 @@ public class PlayerCollitions : MonoBehaviour
            {
                for (int i = 0 ; i< gameManager.stairs.Count ; i++)
                {
-                   if (score > 0)
+                   if (score > 40)
                    {
                        endpos = new Vector3(gameManager.stairs[i].position.x, gameManager.stairs[i].position.y,gameManager.stairs[i].position.z);
-                       transform.DOMove(endpos, 4f);
-                       score -= 2;
+                       transform.DOMove(endpos, 2f).OnComplete((() => {gameManager.defBadanim.SetTrigger(Animator.StringToHash("dance"));}));
+                       score -= 40;
                    }
+                   
                   
                }
            }
