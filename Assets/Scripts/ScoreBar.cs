@@ -12,7 +12,7 @@ public class ScoreBar : MonoBehaviour
 
     public void SetScore(int score )
     {
-        score = Mathf.Clamp(score, 0, 100);
+        score = Mathf.Clamp(score, 0, 180);
         //Slider.value = score;
         DOTween.To(()=> Slider.value, x=> Slider.value = x, score, 0.3f);
     }
