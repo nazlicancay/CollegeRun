@@ -254,7 +254,7 @@ public class PlayerCollitions : MonoBehaviour
 
        if (other.CompareTag("stair1"))
        {
-           CameraManager.Instance.ActivateCamera(0);
+          
            gameManager.GameEnded = true;
            if (bad == true)
            {
@@ -269,6 +269,7 @@ public class PlayerCollitions : MonoBehaviour
 
            if (good = true)
            {
+               CameraManager.Instance.ActivateCamera(0);
                for (int i = 0 ; i< gameManager.stairs.Count ; i++)
                {
                    if (score >= 45)
