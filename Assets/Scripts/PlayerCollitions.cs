@@ -44,7 +44,8 @@ public class PlayerCollitions : MonoBehaviour
 
     private void Update()
     {
-        if (score > 100)
+        
+        if (score >= 180)
         {
             switch (currentState)
             {
@@ -73,8 +74,6 @@ public class PlayerCollitions : MonoBehaviour
         
         if (score < 0)
         {
-           
-          
             switch (currentState)
             {
                 case 1 :
@@ -255,6 +254,7 @@ public class PlayerCollitions : MonoBehaviour
 
        if (other.CompareTag("stair1"))
        {
+           CameraManager.Instance.ActivateCamera(0);
            gameManager.GameEnded = true;
            if (bad == true)
            {
@@ -271,15 +271,16 @@ public class PlayerCollitions : MonoBehaviour
            {
                for (int i = 0 ; i< gameManager.stairs.Count ; i++)
                {
-                   if (score > 40)
+                   if (score >= 45)
                    {
                        endpos = new Vector3(gameManager.stairs[i].position.x, gameManager.stairs[i].position.y,gameManager.stairs[i].position.z);
                        transform.DOMove(endpos, 2f).OnComplete((() => {gameManager.defBadanim.SetTrigger(Animator.StringToHash("dance"));}));
-                       score -= 40;
+                       score -= 45;
                    }
                    
                   
                }
+               
            }
           
        }
@@ -287,6 +288,7 @@ public class PlayerCollitions : MonoBehaviour
        if (other.CompareTag("finish"))
        {
            gameManager.GoodAnim.SetTrigger(Animator.StringToHash("handshake"));
+           gameManager.FinalCharAnim.SetTrigger(Animator.StringToHash("handShake"));
            gameManager.GoodAnim.SetBool("walk" ,false);
        }
    }

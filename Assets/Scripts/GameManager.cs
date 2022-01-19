@@ -18,6 +18,7 @@ public class GameManager : Singleton<GameManager>
      public Animator badanim;
      public Animator defBadanim;
      public Animator GoodAnim;
+     public Animator FinalCharAnim;
      public List<Transform> stairs = new List<Transform>();
     void Start()
     {
@@ -52,6 +53,7 @@ public class GameManager : Singleton<GameManager>
     public void Fail()
     {
         FailText.gameObject.SetActive(true);
+        GameEnded = true;
         badanim.SetTrigger((Animator.StringToHash("fail")));
         defBadanim.SetTrigger(Animator.StringToHash("fail"));
     }
